@@ -1,0 +1,33 @@
+% MATLAB code for visualizing data from a channel as a filled area
+
+readChannelID = 1278264;
+Fhertz = 1;
+Fdezibel = 2;
+FnewStart = 3;
+
+% Channel Read API Key 
+
+readAPIKey = '8I1F6MR7NOOMFG27';
+
+
+%% Read Data
+
+[dataNS,timeNS] = thingSpeakRead(1278264, 'Field', FnewStart, 'NumPoints', 2, 'ReadKey', readAPIKey);
+tRange = [timeNS(end-1), timeNS(end)];
+tRange2 = [timeNS(end), datetime('now')];
+
+Dezibeltime1 = thingSpeakRead(readChannelID,'Fields',Fdezibel,'DateRange', tRange, 'ReadKey',readAPIKey); 
+Dezibeltime2 = thingSpeakRead(readChannelID,'Fields',Fdezibel,'DateRange', tRange2, 'ReadKey',readAPIKey); 
+
+Hertztime1 = thingSpeakRead(readChannelID,'Fields',Fhertz,'DateRange', tRange, 'ReadKey',readAPIKey); 
+Hertztime2 = thingSpeakRead(readChannelID,'Fields',Fhertz,'DateRange', tRange2, 'ReadKey',readAPIKey); 
+
+
+%% Visualize Data
+
+plot(Hertztime1,Dezibeltime1, Hertztime2,Dezibeltime2);
+legend({'linkes Ohr','rechtes Ohr'});
+xlabel('Frequenz (Hz)');
+ylabel('Hörschwelle (dB)');
+set(gca,'XAxisLocation','top','YAxisLocation','left','ydir','reverse');
+grid on ;
