@@ -1,0 +1,60 @@
+% MATLAB code for visualizing data from a channel as a filled area
+% 2D plot using the AREA function.
+
+% Prior to running this MATLAB code template, assign the channel variables.
+% Set 'readChannelID' to the channel ID of the channel to read from. 
+% Also, assign the read field IDs to the variables 'fieldID1', and 'fieldID2'. 
+
+% TODO - Replace the [] with channel ID to read data from:
+readChannelID = 1278264;
+% TODO - Replace the [] with the Field ID to read data from:
+Fhertz = 1;
+% TODO - Replace the [] with the Field ID to read data from:
+Fdezibel = 2;
+FnewStart = 3;
+FnewCustomer = 4;
+
+% Channel Read API Key 
+% If your channel is private, then enter the read API
+% Key between the '' below: 
+readAPIKey = '8I1F6MR7NOOMFG27';
+
+
+%% Read Data
+
+% Read first data variable
+%dataH = thingSpeakRead(readChannelID, 'Field', Fhertz, 'NumPoints', 30, 'ReadKey', readAPIKey);
+%data1 = [125 250 500 750 1000];
+
+% Read second data variable
+%dataD = thingSpeakRead(readChannelID, 'Field', Fdezibel, 'NumPoints', 30, 'ReadKey', readAPIKey);
+[dataNC,timeNC] = thingSpeakRead(1278264, 'Field', FnewCustomer, 'NumPoints', 2, 'ReadKey', readAPIKey);
+tRange = [timeNC(end-1), timeNC(end)]; % hole vorletzten Kunden
+
+[dataNS, timeNS] = thingSpeakRead(readChannelID, 'Field', FnewStart, 'DateRange', tRange, 'ReadKey', readAPIKey);
+tRange1 = [timeNS(1), timeNS(2)]; % Range linkes Ohr 
+Dezibeltime2 = [];
+Hertztime2 = [];
+
+if (dataNS(2) > 0) && (dataNS(3) > 0) % Range rechtes Ohr
+tRange2 = [timeNS(2), timeNS(3)]
+Dezibeltime2 = thingSpeakRead(readChannelID,'Fields',Fdezibel,'DateRange', tRange2, 'ReadKey',readAPIKey)
+Hertztime2 = thingSpeakRead(readChannelID,'Fields',Fhertz,'DateRange', tRange2, 'ReadKey',readAPIKey)
+end;
+
+Dezibeltime1 = thingSpeakRead(readChannelID,'Fields',Fdezibel,'DateRange', tRange1, 'ReadKey',readAPIKey); 
+Hertztime1 = thingSpeakRead(readChannelID,'Fields',Fhertz,'DateRange', tRange1, 'ReadKey',readAPIKey); 
+
+%% Process Data
+
+% Concatenate the two data variables
+%data = [data1, data2];
+
+%% Visualize Data
+
+plot(Hertztime1,Dezibeltime1, Hertztime2,Dezibeltime2);
+legend({'linkes Ohr','rechtes Ohr'});
+xlabel('Frequenz (Hz)');
+ylabel('Hörschwelle (dB)');
+set(gca,'XAxisLocation','top','YAxisLocation','left','ydir','reverse');
+grid on ;
