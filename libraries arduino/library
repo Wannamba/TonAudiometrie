@@ -1,1 +1,2 @@
-
+die Library Adafruit_VS1053 gehört zum MP3 FeatherWing und ist die einzige, welche extra bei der Arduino IDE hinzugefügt werden muss.
+alle anderen genutzten Libraries sind bei der Standard-Installation der Arduino IDE enthalten.
