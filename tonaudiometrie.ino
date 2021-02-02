@@ -66,9 +66,8 @@ void setup() { // Einmalige Initialisierung
   WiFi.mode(WIFI_STA);
   delay(100);
   Serial.print ("\nWLAN connect to:");
-  Serial.print("Vodafone-6589");
-  //Serial.print("FRITZ!C9A9-G");
-  WiFi.begin("Vodafone-6589", "W9t3Q#-#6sK");//"Wil717^Guest#"); //"W9t3Q#-#6sK");
+  Serial.print("WLAN-NAME");
+  WiFi.begin("WLAN-NAME", "PASSWORT");
   while (WiFi.status() != WL_CONNECTED) { // Warte bis Verbindung steht
     delay(500);
     Serial.print(".");
@@ -175,7 +174,6 @@ boolean playFrequences(Adafruit_VS1053_FilePlayer myPlayer, const boolean leftEa
     myPlayer.playFullFile(myTrack); // Frequenz abspielen
     if(softSerial.available())
     {
-      Serial.println("Hello available");
       read1 = softSerial.read();
       if (read1){
         substr = "";
@@ -184,7 +182,7 @@ boolean playFrequences(Adafruit_VS1053_FilePlayer myPlayer, const boolean leftEa
         if (counter == 1)
         incVolume = (incVolume - 100) * (-1);
         hz = aba[i-1];
-        myPlayer.stopPlaying();
+      //  myPlayer.stopPlaying();
         if (leftEar == true && counter == 1){ // leftEar -> first of customer
           substr = String("&field3=" + String(1)
                          + "&field4=" + String(1));
@@ -201,6 +199,7 @@ boolean playFrequences(Adafruit_VS1053_FilePlayer myPlayer, const boolean leftEa
           Serial.print(incVolume);
           Serial.print("cmd: ");
           Serial.println(cmd);
+          if (WiFi.status() == WL_CONNECTED)
           httpGET(host, cmd, antwort, 80); // und absenden
         } // Blockende
         Serial.print("update done");
